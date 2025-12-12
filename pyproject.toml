@@ -1,0 +1,24 @@
+[project]
+name = "discograph"
+version = "0.1.0"
+description = "Discord connection network visualizer using ReviewDB"
+authors = [
+    {name = "Alexis LECAM"}
+]
+license = {text = "MIT"}
+requires-python = ">=3.13"
+dependencies = [
+    "pyvis (>=0.3.2,<0.4.0)",
+    "tqdm (>=4.67.1,<5.0.0)",
+    "numpy (>=2.3.5,<3.0.0)",
+    "scipy (>=1.16.3,<2.0.0)",
+    "aiohttp (>=3.13.2,<4.0.0)",
+    "python-louvain (>=0.16,<0.17)"
+]
+
+[tool.poetry]
+packages = [{include = "src"}]
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"

@@ -1,0 +1,155 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 600px;
+                 background-color: #ffffff;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"group": "0", "id": 233958408179417089, "image": "https://cdn.discordapp.com/embed/avatars/0.png", "label": "Root User (233958408179417089)", "level": 0, "shape": "image", "size": 32}, {"font": {"color": "#111", "size": 18}, "group": "0", "id": "community_0", "label": "Community 0 (4 users)", "level": 1, "shape": "box", "size": 28}, {"font": {"color": "#111", "size": 18}, "group": "1", "id": "community_1", "label": "Community 1 (28 users)", "level": 1, "shape": "box", "size": 28}, {"font": {"color": "#111", "size": 18}, "group": "2", "id": "community_2", "label": "Community 2 (14 users)", "level": 1, "shape": "box", "size": 28}, {"font": {"color": "#111", "size": 18}, "group": "3", "id": "community_3", "label": "Community 3 (4 users)", "level": 1, "shape": "box", "size": 28}, {"font": {"color": "#111", "size": 18}, "group": "4", "id": "community_4", "label": "Community 4 (6 users)", "level": 1, "shape": "box", "size": 28}, {"group": "0", "id": "451139302093619200", "image": "https://cdn.discordapp.com/avatars/451139302093619200/b795770d7aac659fb2ab4bac74940180.png", "label": "ludi. (451139302093619200)", "level": 3, "shape": "image"}, {"group": "1", "id": "594161869632307210", "image": "https://cdn.discordapp.com/embed/avatars/4.png", "label": "Deleted User e5ab9a5d#4969 (594161869632307210)", "level": 3, "shape": "image"}, {"group": "0", "id": "704017415432044544", "image": "https://cdn.discordapp.com/avatars/704017415432044544/a77fe7337064640f8d931e11723fd438.png", "label": "polarisyrn (704017415432044544)", "level": 3, "shape": "image"}, {"group": "0", "id": "1147523761222983741", "image": "https://cdn.discordapp.com/embed/avatars/2.png", "label": "deleted_user_b6678c377d28 (1147523761222983741)", "level": 3, "shape": "image"}, {"group": "2", "id": "959816718803431424", "image": "https://cdn.discordapp.com/embed/avatars/4.png", "label": "Deleted User 2a6d55ca#7219 (959816718803431424)", "level": 4, "shape": "image"}, {"group": "2", "id": "1059614915456938084", "image": "https://cdn.discordapp.com/avatars/1059614915456938084/db32bcc6a3a5d8f27f31f23870649af5.png", "label": "sdhhf (1059614915456938084)", "level": 4, "shape": "image"}, {"group": "3", "id": "1178749957709238433", "image": "https://cdn.discordapp.com/avatars/1178749957709238433/252e747642fa17b9d782dc889d73f664.png", "label": "fuwifur (1178749957709238433)", "level": 4, "shape": "image"}, {"group": "2", "id": "1026544706399772772", "image": "https://cdn.discordapp.com/embed/avatars/1.png?size=128", "label": "Deleted User e328cd10#9356 (1026544706399772772)", "level": 5, "shape": "image"}, {"group": "4", "id": "1080534569603825664", "image": "https://cdn.discordapp.com/avatars/1080534569603825664/4c497c9d1d3e717147a9bd368f7bc496.png", "label": "not.icyyy (1080534569603825664)", "level": 5, "shape": "image"}, {"group": "4", "id": "833445015883087893", "image": "https://cdn.discordapp.com/embed/avatars/3.png", "label": "Deleted User 26cfe9f0#0858 (833445015883087893)", "level": 5, "shape": "image"}, {"group": "2", "id": "1003348283835568188", "image": "https://cdn.discordapp.com/avatars/1003348283835568188/c23cb27a5a3c6cea9beac9ab05cc6311.png", "label": "imdriinx (1003348283835568188)", "level": 4, "shape": "image"}, {"group": "2", "id": "974830098899431476", "image": "https://cdn.discordapp.com/embed/avatars/0.png?size=128", "label": "Deleted User 7f228b0a#2375 (974830098899431476)", "level": 5, "shape": "image"}, {"group": "2", "id": "526068920411750402", "image": "https://cdn.discordapp.com/embed/avatars/0.png", "label": "Deleted User 8ed84402#5550 (526068920411750402)", "level": 5, "shape": "image"}, {"group": "2", "id": "956178349481398352", "image": "https://cdn.discordapp.com/avatars/956178349481398352/d52e9c4f66106467413e6b182ae8d737.png", "label": "02e (956178349481398352)", "level": 4, "shape": "image"}, {"group": "2", "id": "850698112162988052", "image": "https://cdn.discordapp.com/embed/avatars/1.png", "label": "Deleted User 0abd7f75#9551 (850698112162988052)", "level": 5, "shape": "image"}, {"group": "1", "id": "987078376076492810", "image": "https://cdn.discordapp.com/avatars/987078376076492810/ce1725342eef12cc93c40deb34d98288.png", "label": "lattewiiu (987078376076492810)", "level": 4, "shape": "image"}, {"group": "1", "id": "1077274288723341452", "image": "https://cdn.discordapp.com/avatars/1077274288723341452/6a4c24e608ed866f0d5ade8c1424a90a.png", "label": "molkify (1077274288723341452)", "level": 4, "shape": "image"}, {"group": "1", "id": "708849711104262194", "image": "https://cdn.discordapp.com/avatars/708849711104262194/4f07a525ea8398488da045ba4a76face.png", "label": "ballss6921 (708849711104262194)", "level": 4, "shape": "image"}, {"group": "1", "id": "1379891094791127122", "image": "https://cdn.discordapp.com/avatars/1379891094791127122/dd2fcd07bb6511752b26642611d7b165.png", "label": "lc0y (1379891094791127122)", "level": 4, "shape": "image"}, {"group": "1", "id": "541721871721168906", "image": "https://cdn.discordapp.com/avatars/541721871721168906/e9f9f7e9c0fb171db24b0822a55d4c0c.png", "label": "emaddog (541721871721168906)", "level": 4, "shape": "image"}, {"group": "1", "id": "659574593262059534", "image": "https://cdn.discordapp.com/avatars/659574593262059534/2b2ed3b3d07fb760bc59dccf1b6ded3a.png", "label": "bankofamericaofficial (659574593262059534)", "level": 4, "shape": "image"}, {"group": "1", "id": "877345121790730252", "image": "https://cdn.discordapp.com/avatars/877345121790730252/fab4bf8b493751d6d1fed96efef79180.png", "label": "rotatable_cube (877345121790730252)", "level": 4, "shape": "image"}, {"group": "1", "id": "1055538614810968245", "image": "https://cdn.discordapp.com/avatars/1055538614810968245/d5470f3b76bcb096607460718e5ff644.png", "label": "lily.rs (1055538614810968245)", "level": 4, "shape": "image"}, {"group": "1", "id": "863836250879688784", "image": "https://cdn.discordapp.com/avatars/863836250879688784/f3d41148452c18b1d3a3f9136f751948.png", "label": "z_gy (863836250879688784)", "level": 4, "shape": "image"}, {"group": "1", "id": "1161601418260656219", "image": "https://cdn.discordapp.com/avatars/1161601418260656219/c42bb7d8d0d7d7f4a30e1a1c41487839.png", "label": "juzefor (1161601418260656219)", "level": 4, "shape": "image"}, {"group": "1", "id": "525379333951324190", "image": "https://cdn.discordapp.com/avatars/525379333951324190/d490bd886fd794306827746fc693af63.png", "label": "milbit (525379333951324190)", "level": 4, "shape": "image"}, {"group": "1", "id": "1154998353382355055", "image": "https://cdn.discordapp.com/avatars/1154998353382355055/dc0d41e2620a332ecdab3abde4fde989.png", "label": "technical_outage (1154998353382355055)", "level": 4, "shape": "image"}, {"group": "1", "id": "818528246542499861", "image": "https://cdn.discordapp.com/avatars/818528246542499861/dccf93b2c78cf57e5b5b022ab4ec46c3.png", "label": "memefax (818528246542499861)", "level": 4, "shape": "image"}, {"group": "1", "id": "954806277953978388", "image": "https://cdn.discordapp.com/avatars/954806277953978388/c6a46d371b3726e740b17a7b7a1d18b3.png", "label": "sakura_kitsu (954806277953978388)", "level": 4, "shape": "image"}, {"group": "1", "id": "1167533265796735070", "image": "https://cdn.discordapp.com/avatars/1167533265796735070/f0ebf6c53c58064a91fed1d3a084babe.png", "label": "jinkqa (1167533265796735070)", "level": 4, "shape": "image"}, {"group": "1", "id": "986132157967761408", "image": "https://cdn.discordapp.com/avatars/986132157967761408/e7cdd140f6d7272f2f3259188e6b56bf.png", "label": "slinx92 (986132157967761408)", "level": 4, "shape": "image"}, {"group": "1", "id": "429602091984486421", "image": "https://cdn.discordapp.com/avatars/429602091984486421/1301dbc076464ea85426052084d922ce.png", "label": "terminator0.1 (429602091984486421)", "level": 4, "shape": "image"}, {"group": "1", "id": "857119387144552480", "image": "https://cdn.discordapp.com/avatars/857119387144552480/c37d0b6a937135ff56b69b8cb116f229.png", "label": "boosterkill. (857119387144552480)", "level": 4, "shape": "image"}, {"group": "1", "id": "711896019800948808", "image": "https://cdn.discordapp.com/avatars/711896019800948808/28d85998080d2dde5dc14098d14803b2.png", "label": "comrade_parrot (711896019800948808)", "level": 4, "shape": "image"}, {"group": "1", "id": "965054690121355326", "image": "https://cdn.discordapp.com/avatars/965054690121355326/cb8b3cd06bcf0b37eb19675023fd9f56.png", "label": "saxton_hale_ (965054690121355326)", "level": 4, "shape": "image"}, {"group": "1", "id": "422195092225261568", "image": "https://cdn.discordapp.com/avatars/422195092225261568/a37ab3715c1da5adccdddd0d226b0f70.png", "label": "mari2_ok (422195092225261568)", "level": 4, "shape": "image"}, {"group": "1", "id": "935561762747601006", "image": "https://cdn.discordapp.com/avatars/935561762747601006/3c3dc383f89b3b96e1c20753290816a3.png", "label": "dmitry_yazov_tno (935561762747601006)", "level": 4, "shape": "image"}, {"group": "1", "id": "851829099957190677", "image": "https://cdn.discordapp.com/avatars/851829099957190677/8dc55d0b68d8b0e191cfd6c920754db2.png", "label": "danke033 (851829099957190677)", "level": 4, "shape": "image"}, {"group": "1", "id": "134490101190361088", "image": "https://cdn.discordapp.com/avatars/134490101190361088/555a27ef4f07589d4edd7049365c9f3b.png", "label": "fvrrotic (134490101190361088)", "level": 4, "shape": "image"}, {"group": "1", "id": "711990337073315950", "image": "https://cdn.discordapp.com/avatars/711990337073315950/eb914bee6a1f0cc27919276911f002f4.png", "label": "win91 (711990337073315950)", "level": 4, "shape": "image"}, {"group": "1", "id": "971575468195184650", "image": "https://cdn.discordapp.com/avatars/971575468195184650/88aa55775249241b69deea0111a11ddf.png", "label": "._retro_. (971575468195184650)", "level": 4, "shape": "image"}, {"group": "1", "id": "764041156127358988", "image": "https://cdn.discordapp.com/avatars/764041156127358988/1522ccbfccdc2dc90d689af04265898b.png", "label": "flumichu (764041156127358988)", "level": 4, "shape": "image"}, {"group": "3", "id": "647513505204797443", "image": "https://cdn.discordapp.com/avatars/647513505204797443/a_1dd52b4137e18248771c77f8cc6fc04d.gif", "label": "owniqui (647513505204797443)", "level": 5, "shape": "image"}, {"group": "3", "id": "1058047674772881421", "image": "https://cdn.discordapp.com/avatars/1058047674772881421/f569b6d5933ad5f84735c50d6c5edcd6.png", "label": "maxwellmm2 (1058047674772881421)", "level": 5, "shape": "image"}, {"group": "3", "id": "1076387390756749312", "image": "https://cdn.discordapp.com/avatars/1076387390756749312/191c938a805bc005e1867c80484bf1a7.png", "label": "xxxxxxxxxx_1 (1076387390756749312)", "level": 5, "shape": "image"}, {"group": "2", "id": "1112144278848811068", "image": "https://cdn.discordapp.com/embed/avatars/5.png", "label": "deleted_user_2b4582f1453d (1112144278848811068)", "level": 5, "shape": "image"}, {"group": "2", "id": "978295825975373854", "image": "https://cdn.discordapp.com/embed/avatars/4.png", "label": "daddy_street (978295825975373854)", "level": 6, "shape": "image"}, {"group": "4", "id": "1030294040702365827", "image": "https://cdn.discordapp.com/embed/avatars/0.png", "label": "Deleted User ffe611c7#1190 (1030294040702365827)", "level": 6, "shape": "image"}, {"group": "4", "id": "836932067287629834", "image": "https://cdn.discordapp.com/avatars/836932067287629834/a_bfdb34a5089fa82908b6a3d1beb92cba.gif", "label": "karoxik (836932067287629834)", "level": 6, "shape": "image"}, {"group": "4", "id": "911285290923085924", "image": "https://cdn.discordapp.com/embed/avatars/1.png", "label": "Deleted User b4edb907#9006 (911285290923085924)", "level": 6, "shape": "image"}, {"group": "4", "id": "830387804239822889", "image": "https://cdn.discordapp.com/avatars/830387804239822889/cae0850f11fd3c0285f6ab8fbb2d21c0.png", "label": "mamaslittleboy (830387804239822889)", "level": 6, "shape": "image"}, {"group": "2", "id": "694894108329639946", "image": "https://cdn.discordapp.com/embed/avatars/2.png?size=128", "label": "Deleted User 2c68c686#9647 (694894108329639946)", "level": 6, "shape": "image"}, {"group": "2", "id": "966673512272130128", "image": "https://cdn.discordapp.com/avatars/966673512272130128/72f4366bdec93f6a9799a315d8da731a.png", "label": "onatics.alt (966673512272130128)", "level": 6, "shape": "image"}, {"group": "2", "id": "953255794856558642", "image": "https://cdn.discordapp.com/embed/avatars/4.png", "label": "deleted_user_ad7b54325892 (953255794856558642)", "level": 6, "shape": "image"}, {"group": "2", "id": "792386198433562624", "image": "https://cdn.discordapp.com/avatars/792386198433562624/d68a284aa1c015bb4cb148ced8c31305.png", "label": "miyukithecat (792386198433562624)", "level": 6, "shape": "image"}]);
+                  edges = new vis.DataSet([{"color": "hsl(0, 70%, 55%)", "from": 233958408179417089, "to": "community_0", "width": 3}, {"color": "hsl(72, 70%, 55%)", "from": 233958408179417089, "to": "community_1", "width": 3}, {"color": "hsl(144, 70%, 55%)", "from": 233958408179417089, "to": "community_2", "width": 3}, {"color": "hsl(216, 70%, 55%)", "from": 233958408179417089, "to": "community_3", "width": 3}, {"color": "hsl(288, 70%, 55%)", "from": 233958408179417089, "to": "community_4", "width": 3}, {"color": "hsl(0, 70%, 55%)", "from": 233958408179417089, "to": "451139302093619200", "width": 2}, {"color": "hsl(72, 70%, 55%)", "from": "community_1", "to": "594161869632307210", "width": 2}, {"color": "hsl(0, 70%, 55%)", "from": 233958408179417089, "to": "704017415432044544", "width": 2}, {"color": "hsl(0, 70%, 55%)", "from": 233958408179417089, "to": "1147523761222983741", "width": 2}, {"color": "hsl(144, 70%, 55%)", "from": "community_2", "to": "959816718803431424", "width": 2}, {"color": "hsl(216, 70%, 55%)", "from": "community_3", "to": "1178749957709238433", "width": 2}, {"color": "hsl(144, 70%, 55%)", "from": "community_2", "to": "1059614915456938084", "width": 2}, {"color": "hsl(72, 70%, 55%)", "from": "594161869632307210", "to": "987078376076492810", "width": 2}, {"color": "hsl(72, 70%, 55%)", "from": "594161869632307210", "to": "1077274288723341452", "width": 2}, {"color": "hsl(72, 70%, 55%)", "from": "594161869632307210", "to": "708849711104262194", "width": 2}, {"color": "hsl(72, 70%, 55%)", "from": "594161869632307210", "to": "1379891094791127122", "width": 2}, {"color": "hsl(72, 70%, 55%)", "from": "594161869632307210", "to": "541721871721168906", "width": 2}, {"color": "hsl(72, 70%, 55%)", "from": "594161869632307210", "to": "659574593262059534", "width": 2}, {"color": "hsl(72, 70%, 55%)", "from": "594161869632307210", "to": "877345121790730252", "width": 2}, {"color": "hsl(72, 70%, 55%)", "from": "594161869632307210", "to": "1055538614810968245", "width": 2}, {"color": "hsl(72, 70%, 55%)", "from": "594161869632307210", "to": "863836250879688784", "width": 2}, {"color": "hsl(72, 70%, 55%)", "from": "594161869632307210", "to": "1161601418260656219", "width": 2}, {"color": "hsl(72, 70%, 55%)", "from": "594161869632307210", "to": "525379333951324190", "width": 2}, {"color": "hsl(72, 70%, 55%)", "from": "594161869632307210", "to": "1154998353382355055", "width": 2}, {"color": "hsl(72, 70%, 55%)", "from": "594161869632307210", "to": "818528246542499861", "width": 2}, {"color": "hsl(72, 70%, 55%)", "from": "594161869632307210", "to": "954806277953978388", "width": 2}, {"color": "hsl(72, 70%, 55%)", "from": "594161869632307210", "to": "1167533265796735070", "width": 2}, {"color": "hsl(72, 70%, 55%)", "from": "594161869632307210", "to": "986132157967761408", "width": 2}, {"color": "hsl(72, 70%, 55%)", "from": "594161869632307210", "to": "429602091984486421", "width": 2}, {"color": "hsl(72, 70%, 55%)", "from": "594161869632307210", "to": "857119387144552480", "width": 2}, {"color": "hsl(72, 70%, 55%)", "from": "594161869632307210", "to": "711896019800948808", "width": 2}, {"color": "hsl(72, 70%, 55%)", "from": "594161869632307210", "to": "965054690121355326", "width": 2}, {"color": "hsl(72, 70%, 55%)", "from": "594161869632307210", "to": "422195092225261568", "width": 2}, {"color": "hsl(72, 70%, 55%)", "from": "594161869632307210", "to": "935561762747601006", "width": 2}, {"color": "hsl(72, 70%, 55%)", "from": "594161869632307210", "to": "851829099957190677", "width": 2}, {"color": "hsl(72, 70%, 55%)", "from": "594161869632307210", "to": "134490101190361088", "width": 2}, {"color": "hsl(72, 70%, 55%)", "from": "594161869632307210", "to": "711990337073315950", "width": 2}, {"color": "hsl(72, 70%, 55%)", "from": "594161869632307210", "to": "971575468195184650", "width": 2}, {"color": "hsl(72, 70%, 55%)", "from": "594161869632307210", "to": "764041156127358988", "width": 2}, {"color": "hsl(144, 70%, 55%)", "from": "community_2", "to": "1003348283835568188", "width": 2}, {"color": "hsl(144, 70%, 55%)", "from": "community_2", "to": "956178349481398352", "width": 2}, {"color": "hsl(144, 70%, 55%)", "from": "959816718803431424", "to": "1026544706399772772", "width": 2}, {"color": "hsl(288, 70%, 55%)", "from": "community_4", "to": "1080534569603825664", "width": 2}, {"color": "hsl(288, 70%, 55%)", "from": "community_4", "to": "833445015883087893", "width": 2}, {"color": "hsl(144, 70%, 55%)", "from": "959816718803431424", "to": "974830098899431476", "width": 2}, {"color": "hsl(144, 70%, 55%)", "from": "959816718803431424", "to": "526068920411750402", "width": 2}, {"color": "hsl(144, 70%, 55%)", "from": "959816718803431424", "to": "850698112162988052", "width": 2}, {"color": "hsl(144, 70%, 55%)", "from": "959816718803431424", "to": "1112144278848811068", "width": 2}, {"color": "hsl(216, 70%, 55%)", "from": "1178749957709238433", "to": "647513505204797443", "width": 2}, {"color": "hsl(216, 70%, 55%)", "from": "1178749957709238433", "to": "1058047674772881421", "width": 2}, {"color": "hsl(216, 70%, 55%)", "from": "1178749957709238433", "to": "1076387390756749312", "width": 2}, {"color": "hsl(144, 70%, 55%)", "from": "1026544706399772772", "to": "978295825975373854", "width": 2}, {"color": "hsl(288, 70%, 55%)", "from": "1080534569603825664", "to": "1030294040702365827", "width": 2}, {"color": "hsl(288, 70%, 55%)", "from": "1080534569603825664", "to": "836932067287629834", "width": 2}, {"color": "hsl(288, 70%, 55%)", "from": "1080534569603825664", "to": "911285290923085924", "width": 2}, {"color": "hsl(288, 70%, 55%)", "from": "833445015883087893", "to": "830387804239822889", "width": 2}, {"color": "hsl(144, 70%, 55%)", "from": "974830098899431476", "to": "694894108329639946", "width": 2}, {"color": "hsl(144, 70%, 55%)", "from": "974830098899431476", "to": "966673512272130128", "width": 2}, {"color": "hsl(144, 70%, 55%)", "from": "850698112162988052", "to": "953255794856558642", "width": 2}, {"color": "hsl(144, 70%, 55%)", "from": "850698112162988052", "to": "792386198433562624", "width": 2}, {"color": "#C0C0C0", "dashes": true, "from": "594161869632307210", "physics": false, "smooth": true, "to": "704017415432044544", "width": 1}, {"color": "#C0C0C0", "dashes": true, "from": "704017415432044544", "physics": false, "smooth": true, "to": "1059614915456938084", "width": 1}, {"color": "#C0C0C0", "dashes": true, "from": "704017415432044544", "physics": false, "smooth": true, "to": "959816718803431424", "width": 1}, {"color": "#C0C0C0", "dashes": true, "from": "704017415432044544", "physics": false, "smooth": true, "to": "1003348283835568188", "width": 1}, {"color": "#C0C0C0", "dashes": true, "from": "959816718803431424", "physics": false, "smooth": true, "to": "1178749957709238433", "width": 1}, {"color": "#C0C0C0", "dashes": true, "from": "1059614915456938084", "physics": false, "smooth": true, "to": "1080534569603825664", "width": 1}, {"color": "#C0C0C0", "dashes": true, "from": "1059614915456938084", "physics": false, "smooth": true, "to": "833445015883087893", "width": 1}, {"color": "#C0C0C0", "dashes": true, "from": "1178749957709238433", "physics": false, "smooth": true, "to": "1003348283835568188", "width": 1}, {"color": "#C0C0C0", "dashes": true, "from": "1178749957709238433", "physics": false, "smooth": true, "to": "974830098899431476", "width": 1}, {"color": "#C0C0C0", "dashes": true, "from": "1178749957709238433", "physics": false, "smooth": true, "to": "833445015883087893", "width": 1}, {"color": "#C0C0C0", "dashes": true, "from": "1080534569603825664", "physics": false, "smooth": true, "to": "526068920411750402", "width": 1}, {"color": "#C0C0C0", "dashes": true, "from": "1080534569603825664", "physics": false, "smooth": true, "to": "956178349481398352", "width": 1}, {"color": "#C0C0C0", "dashes": true, "from": "833445015883087893", "physics": false, "smooth": true, "to": "956178349481398352", "width": 1}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>
