@@ -9,7 +9,8 @@ import community as community_louvain
 
 URL_TEMPLATE = 'https://manti.vendicated.dev/api/reviewdb/users/{id}/reviews'
 USERID_BLACKLIST = ["1134864775000629298"]
-MAX_RETRIES = 6
+MAX_RETRIES = 10
+SIMULTANEOUS_REQUESTS = 40
 
 async def fetch_connections(session, semaphore, targetUserId: int):
     url = URL_TEMPLATE.format(id=targetUserId)
@@ -55,7 +56,7 @@ async def crawl_graph(rootUserId, maxDepth):
             nextToVisit = []
             start = time.time()
 
-            semaphore = asyncio.Semaphore(20)
+            semaphore = asyncio.Semaphore(SIMULTANEOUS_REQUESTS)
             tasks = [fetch_connections(session, semaphore, uid) for (uid, _) in toVisit]
 
             results = []
@@ -95,6 +96,7 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("-id", "--userid", required=True)
     parser.add_argument("-d", "--depth", required=True)
+    parser.add_argument("-cross", "--show-cross-communities", action='store_true', default=False)
     args = parser.parse_args()
 
     root = int(args.userid)
@@ -137,7 +139,7 @@ def main():
     for commId, hubId in communityHubs.items():
         net.add_node(
             hubId,
-            label=f"Community {commId} ({len(communities[commId])} users)",
+            label=f"Community {commId + 1} ({len(communities[commId])} users)",
             shape="box",
             level=1,
             group=str(commId),
@@ -178,11 +180,12 @@ def main():
             hub = communityHubs[nodeComm]
             net.add_edge(hub, node, color=communityColors[nodeComm], width=2)
 
-    for u, v in G.edges:
-        if bfsTree.has_edge(u, v) or bfsTree.has_edge(v, u):
-            continue
-        if partition[u] != partition[v]:
-            net.add_edge(u, v, color="#C0C0C0", dashes=True, width=1, physics=False, smooth=True)
+    if args.show_cross_communities:
+        for u, v in G.edges:
+            if bfsTree.has_edge(u, v) or bfsTree.has_edge(v, u):
+                continue
+            if partition[u] != partition[v]:
+                net.add_edge(u, v, color="#C0C0C0", dashes=True, width=1, physics=False, smooth=True)
 
     net.show("discograph.html", notebook=False)
 
