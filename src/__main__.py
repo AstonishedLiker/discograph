@@ -113,6 +113,7 @@ def main():
 
     numCommunities = len(communities)
     print(f"[+] Found {numCommunities} communities")
+    print(f"[+] Louvain modularity score: {community_louvain.modularity(partition, G):.4f}")
 
     communityColors = generate_palette(numCommunities)
 
